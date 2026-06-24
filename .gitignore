@@ -1,0 +1,25 @@
+# Java
+target/
+*.class
+*.jar
+
+# Maven
+.settings/
+*.iml
+.idea/
+
+# IntelliJ
+out/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Screenshots
+Screenshots/
+
+# Temporary files
+*.tmp
