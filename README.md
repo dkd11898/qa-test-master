@@ -71,7 +71,4 @@ The following folder `src/main/java/AutomationTest/mission` contains the followi
 
     If you cannot run Maven locally, push the changes and configure a CI workflow (GitHub Actions) to run the build and tests.
 
-    Repository cleanup
-    - The file `QA-Automation-Guidelines.docx` has been removed from the repository during cleanup to keep the repo focused on the runnable Selenium/RestAssured Java framework.
-    - The repository now contains a Java-based automation framework (POM + RestAssured) and a GitHub Actions workflow that runs `mvn test` on push/PR.
 
