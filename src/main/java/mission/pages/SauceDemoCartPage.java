@@ -1,10 +1,9 @@
 package mission.pages;
 
-import mission.BasePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
@@ -16,8 +15,8 @@ public class SauceDemoCartPage extends BasePage {
     @FindBy(id = "checkout")
     private WebElement checkoutButton;
 
-    public SauceDemoCartPage() {
-        PageFactory.initElements(driver, this);
+    public SauceDemoCartPage(WebDriver driver) {
+        super(driver);
     }
 
     public int getCartItemCount() {
@@ -34,12 +33,10 @@ public class SauceDemoCartPage extends BasePage {
     }
 
     public void removeItem(String itemName) {
-        WebElement itemRow = driver.findElement(By.xpath("//div[@class='cart_item']//*[text()='" + itemName + "']/ancestor::div[@class='cart_item']"));
-        WebElement removeButton = itemRow.findElement(By.cssSelector("button.cart_button"));
-        removeButton.click();
+        click(waitUntilPresent(By.id("remove-" + slugify(itemName))));
     }
 
     public void clickCheckout() {
-        checkoutButton.click();
+        click(checkoutButton);
     }
 }

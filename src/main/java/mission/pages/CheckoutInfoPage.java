@@ -1,9 +1,8 @@
 package mission.pages;
 
-import mission.BasePage;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 public class CheckoutInfoPage extends BasePage {
 
@@ -19,26 +18,23 @@ public class CheckoutInfoPage extends BasePage {
     @FindBy(id = "continue")
     private WebElement continueButton;
 
-    public CheckoutInfoPage() {
-        PageFactory.initElements(driver, this);
+    public CheckoutInfoPage(WebDriver driver) {
+        super(driver);
     }
 
     public void fillCustomerInformation(String firstName, String lastName, String postalCode) {
         if (firstName != null) {
-            firstNameField.clear();
-            firstNameField.sendKeys(firstName);
+            type(firstNameField, firstName);
         }
         if (lastName != null) {
-            lastNameField.clear();
-            lastNameField.sendKeys(lastName);
+            type(lastNameField, lastName);
         }
         if (postalCode != null) {
-            postalCodeField.clear();
-            postalCodeField.sendKeys(postalCode);
+            type(postalCodeField, postalCode);
         }
     }
 
     public void clickContinue() {
-        continueButton.click();
+        click(continueButton);
     }
 }

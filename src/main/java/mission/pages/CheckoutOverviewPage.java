@@ -1,13 +1,10 @@
 package mission.pages;
 
-import mission.BasePage;
-import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CheckoutOverviewPage extends BasePage {
 
@@ -20,8 +17,8 @@ public class CheckoutOverviewPage extends BasePage {
     @FindBy(css = ".summary_tax_label")
     private WebElement taxLabel;
 
-    public CheckoutOverviewPage() {
-        PageFactory.initElements(driver, this);
+    public CheckoutOverviewPage(WebDriver driver) {
+        super(driver);
     }
 
     public double calculateDisplayedItemTotal() {

@@ -1,26 +1,23 @@
 package mission.api;
 
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import mission.config.ConfigReader;
 import org.json.JSONObject;
 
-import java.util.Map;
+import static io.restassured.RestAssured.given;
 
 public class ReqresApiClient {
 
-    private static final String BASE_URL = "https://reqres.in/api";
-
     public Response getUsers(int page) {
-        return RestAssured.given()
-                .baseUri(BASE_URL)
+        return baseRequest()
                 .param("page", page)
                 .when()
                 .get("/users");
     }
 
     public Response getUser(int userId) {
-        return RestAssured.given()
-                .baseUri(BASE_URL)
+        return baseRequest()
                 .when()
                 .get(String.format("/users/%d", userId));
     }
@@ -30,8 +27,7 @@ public class ReqresApiClient {
         requestBody.put("name", name);
         requestBody.put("job", job);
 
-        return RestAssured.given()
-                .baseUri(BASE_URL)
+        return baseRequest()
                 .header("Content-Type", "application/json")
                 .body(requestBody.toString())
                 .when()
@@ -43,11 +39,16 @@ public class ReqresApiClient {
         requestBody.put("email", email);
         requestBody.put("password", password);
 
-        return RestAssured.given()
-                .baseUri(BASE_URL)
+        return baseRequest()
                 .header("Content-Type", "application/json")
                 .body(requestBody.toString())
                 .when()
                 .post("/login");
+    }
+
+    private RequestSpecification baseRequest() {
+        return given()
+                .baseUri(ConfigReader.getProperty("api.baseUrl"))
+                .header("x-api-key", ConfigReader.getProperty("api.key"));
     }
 }

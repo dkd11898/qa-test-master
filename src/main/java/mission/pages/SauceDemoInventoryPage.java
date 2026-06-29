@@ -1,14 +1,11 @@
 package mission.pages;
 
-import mission.BasePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 public class SauceDemoInventoryPage extends BasePage {
 
@@ -18,34 +15,22 @@ public class SauceDemoInventoryPage extends BasePage {
     @FindBy(css = ".shopping_cart_badge")
     private WebElement cartBadge;
 
-    public SauceDemoInventoryPage() {
-        PageFactory.initElements(driver, this);
+    public SauceDemoInventoryPage(WebDriver driver) {
+        super(driver);
     }
 
     public void addItemsToCart(List<String> itemNames) {
         for (String itemName : itemNames) {
-            String buttonId = "add-to-cart-" + itemName.toLowerCase(Locale.ENGLISH).replace(" ", "-");
-            WebElement addButton = driver.findElement(By.id(buttonId));
-            addButton.click();
+            click(waitUntilPresent(By.id("add-to-cart-" + slugify(itemName))));
         }
+        waitUntil(driver -> getCartItemCount() == itemNames.size());
     }
 
     public int getCartItemCount() {
-        if (isElementVisible(cartBadge)) {
-            return Integer.parseInt(cartBadge.getText().trim());
-        }
-        return 0;
+        return isVisible(cartBadge) ? Integer.parseInt(cartBadge.getText().trim()) : 0;
     }
 
     public void openCart() {
-        cartLink.click();
-    }
-
-    public boolean isElementVisible(WebElement element) {
-        try {
-            return element.isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
+        click(cartLink);
     }
 }

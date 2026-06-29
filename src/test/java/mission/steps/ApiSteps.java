@@ -1,17 +1,16 @@
 package mission.steps;
 
-import cucumber.api.DataTable;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import org.testng.Assert;
 import mission.api.ReqresApiClient;
+import org.testng.Assert;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ApiSteps {
 
@@ -44,7 +43,7 @@ public class ApiSteps {
         Assert.assertEquals(total, totalUsersAcrossPages);
     }
 
-    @Given("I make a search for user (.*)")
+    @Given("^I make a search for user (.*)$")
     public void iMakeASearchForUser(String sUserID) {
         response = apiClient.getUser(Integer.parseInt(sUserID));
     }
@@ -52,17 +51,17 @@ public class ApiSteps {
     @Then("I should see the following user data")
     public void iShouldSeeFollowingUserData(DataTable dt) {
         response.then().statusCode(200);
-        Map<String, String> expected = dt.asMaps(String.class, String.class).get(0);
-        Assert.assertEquals(expected.get("first_name"), response.jsonPath().getString("data.first_name"));
-        Assert.assertEquals(expected.get("email"), response.jsonPath().getString("data.email"));
+        Map<String, String> expected = dt.asMaps().get(0);
+        Assert.assertEquals(response.jsonPath().getString("data.first_name"), expected.get("first_name"));
+        Assert.assertEquals(response.jsonPath().getString("data.email"), expected.get("email"));
     }
 
-    @Then("I receive error code (.*) in response")
+    @Then("^I receive error code (.*) in response$")
     public void iReceiveErrorCodeInResponse(int responseCode) {
-        Assert.assertEquals(responseCode, response.statusCode());
+        Assert.assertEquals(response.statusCode(), responseCode);
     }
 
-    @Given("I create a user with following (.*) (.*)")
+    @Given("^I create a user with following (.*) (.*)$")
     public void iCreateUserWithFollowing(String sUsername, String sJob) {
         response = apiClient.createUser(sUsername, sJob);
     }
@@ -70,27 +69,27 @@ public class ApiSteps {
     @Then("response should contain the following data")
     public void responseShouldContainTheFollowingData(DataTable dt) {
         response.then().statusCode(201);
-        Map<String, String> expected = dt.asMaps(String.class, String.class).get(0);
-        Assert.assertEquals(expected.get("name"), response.jsonPath().getString("name"));
-        Assert.assertEquals(expected.get("job"), response.jsonPath().getString("job"));
+        Map<String, String> expected = dt.asMaps().get(0);
+        Assert.assertEquals(response.jsonPath().getString("name"), expected.get("name"));
+        Assert.assertEquals(response.jsonPath().getString("job"), expected.get("job"));
         Assert.assertNotNull(response.jsonPath().getString("id"));
         Assert.assertNotNull(response.jsonPath().getString("createdAt"));
     }
 
     @Given("I login unsuccessfully with the following data")
     public void iLoginSuccesfullyWithFollowingData(DataTable dt) {
-        Map<String, String> credentials = dt.asMaps(String.class, String.class).get(0);
+        Map<String, String> credentials = dt.asMaps().get(0);
         response = apiClient.login(credentials.get("Email"), credentials.get("Password"));
     }
 
     @Then("^I should get a response code of (\\d+)$")
     public void iShouldGetAResponseCodeOf(int responseCode) {
-        Assert.assertEquals(responseCode, response.statusCode());
+        Assert.assertEquals(response.statusCode(), responseCode);
     }
 
     @And("^I should see the following response message:$")
     public void iShouldSeeTheFollowingResponseMessage(DataTable dt) {
-        Map<String, String> expected = dt.asMaps(String.class, String.class).get(0);
+        Map<String, String> expected = dt.asMaps().get(0);
         String body = response.getBody().asString();
         expected.values().forEach(value -> Assert.assertTrue(body.contains(value)));
     }
